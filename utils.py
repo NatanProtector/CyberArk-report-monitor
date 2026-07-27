@@ -1,3 +1,6 @@
+import re
+from config import latest_update_pattern
+
 def parse_int_from_string(s):
     """
     Safely parse an integer from a string.
@@ -23,7 +26,7 @@ except (TypeError, ValueError) as e:
 def get_latest_update_from_body_html(body_html: str) -> str | None:
     # Get text between </span><span class="a29"> and </span><span class="a30">
     match = re.search(
-        r'</span><span class="a29">(.*?)</span><span class="a30">',
+        latest_update_pattern,
         body_html,
         re.DOTALL,
     )
