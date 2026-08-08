@@ -26,5 +26,9 @@ report_titles = {
 new_report_check_interval_seconds = 60
 monitor_cycle_wait_seconds = 60 * 60
 
+# Alert settings.
+latest_update_alert_threshold_minutes = 35
+latest_update_alert_title = "CyberArk Report Alert"
+
 # Regular expression pattern to extract the latest update from the email body.
 latest_update_pattern = r'</span><span class="a29">(.*?)</span><span class="a30">'

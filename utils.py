@@ -97,6 +97,22 @@ def extract_latest_update_from_report_body(
     return latest_update_int
 
 
+def show_os_alert(title: str, message: str) -> None:
+    try:
+        import winsound
+
+        winsound.MessageBeep(winsound.MB_ICONEXCLAMATION)
+    except RuntimeError:
+        pass
+
+    try:
+        import ctypes
+
+        ctypes.windll.user32.MessageBoxW(0, message, title, 0x00000030)
+    except AttributeError as error:
+        raise RuntimeError("OS alert windows are only supported on Windows.") from error
+
+
 def _find_outlook_folder(folders, folder_name: str):
     for folder in folders:
         if folder.Name.casefold() == folder_name.casefold():

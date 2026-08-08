@@ -5,8 +5,14 @@ from config import (
 	report_titles,
 	new_report_check_interval_seconds,
 	monitor_cycle_wait_seconds,
+	latest_update_alert_threshold_minutes,
+	latest_update_alert_title,
 )
-from utils import extract_latest_update_from_report_body, get_latest_outlook_email_report
+from utils import (
+	extract_latest_update_from_report_body,
+	get_latest_outlook_email_report,
+	show_os_alert,
+)
 
 
 def main_monitor():
@@ -45,6 +51,8 @@ def main_monitor():
 			continue
 
 		print("==== Latest CyberArk Report Updates ===================================")
+		alert_messages = []
+
 		for report_key, report in reports.items():
 			latest_update = extract_latest_update_from_report_body(report["html_body"])
 			latest_email_dates[report_key] = report["received_time"]
@@ -53,6 +61,19 @@ def main_monitor():
 				print(f"{report_key}: no update extracted from {report['received_time']}")
 			else:
 				print(f"{report_key}: {latest_update} minutes | email date: {report['received_time']}")
+
+				if latest_update > latest_update_alert_threshold_minutes:
+					alert_messages.append(
+						f"{report_key}: {latest_update} minutes (email date: {report['received_time']})"
+					)
+
+		if alert_messages:
+			message = (
+				"One or more CyberArk reports are above "
+				f"{latest_update_alert_threshold_minutes} minutes:\n\n"
+				+ "\n".join(alert_messages)
+			)
+			show_os_alert(latest_update_alert_title, message)
 
 		sleep(monitor_cycle_wait_seconds)
 
