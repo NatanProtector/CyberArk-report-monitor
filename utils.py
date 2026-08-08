@@ -1,29 +1,27 @@
 import re
 from config import latest_update_pattern
 
-def parse_int_from_string(s):
+
+def parse_int_from_string(value: str) -> int:
     """
     Safely parse an integer from a string.
     Raises ValueError if the string is not a valid integer.
     """
-    if not isinstance(s, str):
+    if not isinstance(value, str):
         raise TypeError("Input must be a string.")
 
-    s = s.strip()  # Remove leading/trailing spaces
+    value = value.strip()
 
     try:
-        return int(s)  # Convert to integer
+        return int(value)
     except ValueError:
-        raise ValueError(f"Cannot convert '{s}' to an integer.")
-
-try:
-    num = parse_int_from_string("  42  ")
-    print("Parsed integer:", num)  # Output: 42
-except (TypeError, ValueError) as e:
-    print("Error:", e)
+        raise ValueError(f"Cannot convert '{value}' to an integer.")
 
 
-def get_latest_update_from_body_html(body_html: str) -> str | None:
+def get_latest_update_from_body_html(body_html: str | None) -> str | None:
+    if not body_html:
+        return None
+
     # Get text between </span><span class="a29"> and </span><span class="a30">
     match = re.search(
         latest_update_pattern,
@@ -34,10 +32,11 @@ def get_latest_update_from_body_html(body_html: str) -> str | None:
         return match.group(1).strip()
     return None
 
-def get_email_body_html_from_outlook_email(
-	title_start: str,
+
+def get_latest_outlook_email_report(
+    title_start: str,
     folder_name: str,
-) -> str:
+) -> dict | None:
     if not title_start:
         raise ValueError("title_start must not be empty")
 
@@ -63,13 +62,30 @@ def get_email_body_html_from_outlook_email(
     if latest_email is None:
         return None
 
-    html_body = getattr(latest_email, "HTMLBody", "")
-    
-    return html_body
+    return {
+        "html_body": getattr(latest_email, "HTMLBody", ""),
+        "received_time": getattr(latest_email, "ReceivedTime", None),
+    }
+
+
+def get_email_body_html_from_outlook_email(
+    title_start: str,
+    folder_name: str,
+) -> str | None:
+    report = get_latest_outlook_email_report(
+        title_start=title_start,
+        folder_name=folder_name,
+    )
+
+    if report is None:
+        return None
+
+    return report["html_body"]
+
 
 def extract_latest_update_from_report_body(
-    html_body: str,
-) -> str | None:
+    html_body: str | None,
+) -> int | None:
 
     latest_update = get_latest_update_from_body_html(html_body)
 
