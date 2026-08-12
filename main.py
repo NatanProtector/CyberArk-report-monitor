@@ -92,8 +92,10 @@ if __name__ == "__main__":
 		try:
 			user_param_int = int(user_param)
 			user_param = user_param_int
+			print(f"Sleeping for {user_param} minutes before starting the monitor...")
 		except ValueError:
 			print("Parameter must be an integer.")
+			sys.exit(1)
 
 	sleep(user_param * 60)  # sleep for user_param minutes
 
