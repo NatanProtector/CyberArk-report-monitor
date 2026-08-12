@@ -1,3 +1,4 @@
+import sys
 from time import sleep
 
 from config import (
@@ -79,4 +80,21 @@ def main_monitor():
 
 
 if __name__ == "__main__":
+
+	# take param from command line
+
+	user_param = 0
+
+	if len(sys.argv) > 1:
+		user_param = sys.argv[1]  # hello
+
+		# check param is integer
+		try:
+			user_param_int = int(user_param)
+			user_param = user_param_int
+		except ValueError:
+			print("Parameter must be an integer.")
+
+	sleep(user_param * 60)  # sleep for user_param minutes
+
 	main_monitor()
