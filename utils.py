@@ -1,6 +1,7 @@
+import datetime
 import re
 from config import latest_update_pattern
-
+import time
 
 def parse_int_from_string(value: str) -> int:
     """
@@ -141,3 +142,23 @@ def _find_latest_email_by_subject_start(folder, title_start: str):
 
     return None
 
+def wait_until_minute(N: int):
+
+    if N > 59 or N < 0:
+        raise ValueError("N must be between 0 and 59.")
+
+    now = datetime.datetime.now()
+
+    # If N is the current minute, wait until the next hour's N minute
+    if now.minute >= N:
+        target = now.replace(minute=N, second=0, microsecond=0)
+        target = target.replace(hour=now.hour + 1)
+    else:
+        target = now.replace(minute=N, second=0, microsecond=0)
+
+    seconds_to_wait = (target - now).total_seconds()
+
+    print(f"Current time: {now:%H:%M:%S}")
+    print(f"Waiting {seconds_to_wait / 60:.1f} minutes...")
+    
+    time.sleep(seconds_to_wait)

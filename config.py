@@ -4,7 +4,6 @@
 # Folder in Outlook where the reports are located.
 reports_folder = "System Reports"
 
-
 # Titles of the reports to monitor. These should match the beginning of the email subject lines.
 report_title_1 = "CyberArkIncomingStatus "
 report_title_2 = "CyberArkOutgoingStatus_Manufacturers"
@@ -32,3 +31,5 @@ latest_update_alert_title = "CyberArk Report Alert"
 
 # Regular expression pattern to extract the latest update from the email body.
 latest_update_pattern = r'</span><span class="a29">(.*?)</span><span class="a30">'
+
+DEFAULT_WAIT_MINUTES = 52

@@ -8,15 +8,17 @@ from config import (
 	monitor_cycle_wait_seconds,
 	latest_update_alert_threshold_minutes,
 	latest_update_alert_title,
+	DEFAULT_WAIT_MINUTES
 )
 from utils import (
 	extract_latest_update_from_report_body,
 	get_latest_outlook_email_report,
 	show_os_alert,
+	wait_until_minute,
 )
 
 
-def main_monitor():
+def main_monitor(wait_minutes):
 	"""Main function to monitor CyberArk reports in Outlook."""
 
 	latest_email_dates = dict.fromkeys(report_titles, None)
@@ -76,27 +78,27 @@ def main_monitor():
 			)
 			show_os_alert(latest_update_alert_title, message)
 
-		sleep(monitor_cycle_wait_seconds)
+		wait_until_minute(wait_minutes)
 
 
 if __name__ == "__main__":
 
 	# take param from command line
 
-	user_param = 0
+	wait_minutes = DEFAULT_WAIT_MINUTES
 
 	if len(sys.argv) > 1:
-		user_param = sys.argv[1]  # hello
+		wait_minutes = sys.argv[1]  # hello
 
 		# check param is integer
 		try:
-			user_param_int = int(user_param)
-			user_param = user_param_int
-			print(f"Sleeping for {user_param} minutes before starting the monitor...")
+			user_param_int = int(wait_minutes)
+			wait_minutes = user_param_int
+			print(f"Waiting until minute {wait_minutes} to start monitoring...")
 		except ValueError:
 			print("Parameter must be an integer.")
 			sys.exit(1)
 
-	sleep(user_param * 60)  # sleep for user_param minutes
+	wait_until_minute(wait_minutes)
 
-	main_monitor()
+	main_monitor(wait_minutes)
