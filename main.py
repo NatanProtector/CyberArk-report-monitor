@@ -69,6 +69,7 @@ def main_monitor(wait_minutes):
 					alert_messages.append(
 						f"{report_key}: {latest_update} minutes (email date: {report['received_time']})"
 					)
+		print("=======================================================================\n")
 
 		if alert_messages:
 			message = (
@@ -77,6 +78,7 @@ def main_monitor(wait_minutes):
 				+ "\n".join(alert_messages)
 			)
 			show_os_alert(latest_update_alert_title, message)
+
 
 		wait_until_minute(wait_minutes)
 
@@ -99,6 +101,6 @@ if __name__ == "__main__":
 			print("Parameter must be an integer.")
 			sys.exit(1)
 
-	wait_until_minute(wait_minutes)
+	wait_until_minute(wait_minutes, display=True)
 
 	main_monitor(wait_minutes)

@@ -142,7 +142,7 @@ def _find_latest_email_by_subject_start(folder, title_start: str):
 
     return None
 
-def wait_until_minute(N: int):
+def wait_until_minute(N: int, display: bool = False) -> None:
 
     if N > 59 or N < 0:
         raise ValueError("N must be between 0 and 59.")
@@ -158,7 +158,8 @@ def wait_until_minute(N: int):
 
     seconds_to_wait = (target - now).total_seconds()
 
-    print(f"Current time: {now:%H:%M:%S}")
-    print(f"Waiting {seconds_to_wait / 60:.1f} minutes...")
+    if display:
+        print(f"Current time: {now:%H:%M:%S}")
+        print(f"Waiting {seconds_to_wait / 60:.1f} minutes...")
     
     time.sleep(seconds_to_wait)
