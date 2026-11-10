@@ -27,6 +27,8 @@ def main_monitor(wait_minutes):
 		reports = {}
 		all_reports_are_new = True
 
+		userNotifiedOfWaiting = False
+
 		for report_key, report_title in report_titles.items():
 			report = get_latest_outlook_email_report(
 				title_start=report_title,
@@ -49,7 +51,9 @@ def main_monitor(wait_minutes):
 			reports[report_key] = report
 
 		if not all_reports_are_new:
-			print("Waiting for new emails for all reports...")
+			if not userNotifiedOfWaiting:
+				print("Waiting for new emails for all reports...")
+				userNotifiedOfWaiting = True
 			sleep(new_report_check_interval_seconds)
 			continue
 
