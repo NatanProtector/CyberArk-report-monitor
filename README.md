@@ -45,13 +45,15 @@ Launch `CyberArkReportMonitor.exe`. No additional runtime installation is needed
 
 | Option | What happens |
 | --- | --- |
-| **1 - Start** | Waits until the next hour (`:00`), then checks hourly at `:00`. Not immediate. |
-| **2 - Delayed start** | Waits until the next `:52` (default), then checks hourly at `:52`. |
+| **1 - Start** | Starts monitoring now. Later cycles use the default minute (`:52`) each hour. |
+| **2 - Delayed start** | Enter a minute (`0-59`). Starts at its next occurrence, then checks at that minute each hour. |
 | **3 - Help** | Shows the guide and exits. Reopen the app to start. |
 
-`:52` means a minute on the clock, not a 52-minute delay. If that minute has
-started, the app waits for the next hour. Keep the window open; **Ctrl+C** stops
-the app. **Close alert dialogs** to let monitoring continue.
+For example, enter **15** at **6:10** to start at **6:15**, a **5-minute wait**.
+The input is a clock minute, not a delay. If that minute has already started,
+the next occurrence is in the following hour.
+
+Keep the window open; **Ctrl+C** stops the app. **Close alert dialogs** to continue.
 
 ## Monitoring Behavior
 
@@ -73,7 +75,7 @@ Settings are built into the EXE. Ask the maintainer for a rebuilt version to cha
 | `latest_update_alert_threshold_minutes` | Alert above this age | `35` minutes |
 | `latest_update_alert_title` | Alert title | `CyberArk Report Alert` |
 | `latest_update_pattern` | HTML extraction pattern | See below |
-| `DEFAULT_WAIT_MINUTES` | Delayed-start minute | `52` |
+| `DEFAULT_WAIT_MINUTES` | Option 1 cycle minute / fallback for invalid option 2 input | `52` |
 
 Maintainers: edit [config.py](config.py). The pattern captures an integer between
 `</span><span class="a29">` and `</span><span class="a30">`.
