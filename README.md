@@ -83,12 +83,10 @@ Maintainers: edit [config.py](config.py). The pattern captures an integer betwee
 
 ## Build an EXE With PyInstaller (Maintainers)
 
-Build on Windows from the project directory (not needed by EXE users):
-
 ```powershell
 py -3 -m venv venv
 .\venv\Scripts\python.exe -m pip install pywin32 pyinstaller
-.\venv\Scripts\python.exe -m PyInstaller --onefile --console --name CyberArkReportMonitor --hidden-import win32timezone start.py
+.\venv\Scripts\python.exe -m PyInstaller --onefile --console --name CyberArkReportMonitor --hidden-import win32timezone main.py
 ```
 
 Output: `dist\CyberArkReportMonitor.exe`. Keep `--console` for the menu and results.
